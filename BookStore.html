@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Book Recommendations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-6">
+<h1 class="text-3xl font-semibold text-blue-700 text-center mb-8">Personalized Book Recommendations</h1>
+
+<div class="bg-white rounded-lg shadow-md p-8 mb-8">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-6">Your Preferences</h2>
+    <form id="preferencesForm" class="space-y-4">
+        <div>
+            <label for="genre" class="block text-gray-700 text-sm font-bold mb-2">Genre:</label>
+            <select id="genre" name="genre" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <option value="">Any</option>
+                <option value="fiction">Fiction</option>
+                <option value="non-fiction">Non-Fiction</option>
+                <option value="fantasy">Fantasy</option>
+                <option value="mystery">Mystery</option>
+                <option value="sci-fi">Science Fiction</option>
+                <option value="romance">Romance</option>
+                <option value="historical">Historical Fiction</option>
+                <option value="thriller">Thriller</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="author" class="block text-gray-700 text-sm font-bold mb-2">Author:</label>
+            <input type="text" id="author" name="author" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter author's name">
+        </div>
+
+        <div>
+            <label for="priceRange" class="block text-gray-700 text-sm font-bold mb-2">Price Range:</label>
+            <select id="priceRange" name="priceRange" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <option value="">Any</option>
+                <option value="0-15">Under £15</option>
+                <option value="10-25">£10 - £25</option>
+                <option value="20-30">£20 -£35</option>
+                <option value="35+">£35+</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="language" class="block text-gray-700 text-sm font-bold mb-2">Language:</label>
+            <select id="language" name="language" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <option value="">Any</option>
+                <option value="English">English</option>
+                <option value="Spanish">Spanish</option>
+                <option value="French">French</option>
+                <option value="German">German</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="format" class="block text-gray-700 text-sm font-bold mb-2">Format:</label>
+            <select id="format" name="format" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                <option value="">Any</option>
+                <option value="Hardcover">Hardcover</option>
+                <option value="Paperback">Paperback</option>
+                <option value="E-book">E-book</option>
+                <option value="Audiobook">Audiobook</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="publicationYear" class="block text-gray-700 text-sm font-bold mb-2">Publication Year:</label>
+            <input type="number" id="publicationYear" name="publicationYear" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter year">
+        </div>
+
+        <button type="submit" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Get Recommendations
+        </button>
+    </form>
+</div>
+
+<div id="recommendations" class="bg-white rounded-lg shadow-md p-8">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-6">Recommendations</h2>
+    <ul id="bookList" class="space-y-3">
+    </ul>
+</div>
+
+<script>
+    const books = [
+        {
+            title: "The Great Gatsby",
+            author: "F. Scott Fitzgerald",
+            genre: "Fiction",
+            price: 10.99,
+            language: "English",
+            format: "Paperback",
+            publicationYear: 1925,
+        },
+        {
+            title: "To Kill a Mockingbird",
+            author: "Harper Lee",
+            genre: "Fiction",
+            price: 12.99,
+            language: "English",
+            format: "Hardcover",
+            publicationYear: 1960,
+        },
+        {
+            title: "1984",
+            author: "George Orwell",
+            genre: "Fiction",
+            price: 9.99,
+            language: "English",
+            format: "Paperback",
+            publicationYear: 1949,
+        },
+        {
+            title: "Pride and Prejudice",
+            author: "Jane Austen",
+            genre: "Romance",
+            price: 8.99,
+            language: "English",
+            format: "E-book",
+            publicationYear: 1813,
+        },
+        {
+            title: "The Catcher in the Rye",
+            author: "J.D. Salinger",
+            genre: "Fiction",
+            price: 11.99,
+            language: "English",
+            format: "Paperback",
+            publicationYear: 1951,
+        },
+        {
+            title: "Becoming",
+            author: "Michelle Obama",
+            genre: "Non-Fiction",
+            price: 20.00,
+            language: "English",
+            format: "Hardcover",
+            publicationYear: 2018,
+        },
+        {
+            title: "Sapiens: A Brief History of Humankind",
+            author: "Yuval Noah Harari",
+            genre: "Non-Fiction",
+            price: 15.50,
+            language: "English",
+            format: "Paperback",
+            publicationYear: 2011,
+        },
+        {
+            title: "The Lord of the Rings",
+            author: "J.R.R. Tolkien",
+            genre: "Fantasy",
+            price: 25.00,
+            language: "English",
+            format: "Hardcover",
+            publicationYear: 1954,
+        },
+        {
+            title: "Harry Potter and the Sorcerer's Stone",
+            author: "J.K. Rowling",
+            genre: "Fantasy",
+            price: 18.99,
+            language: "English",
+            format: "Paperback",
+            publicationYear: 1997,
+        },
+        {
+            title: "The Girl with the Dragon Tattoo",
+            author: "Stieg Larsson",
+            genre: "Mystery",
+            price: 14.99,
+            language: "English",
+            format: "E-book",
+            publicationYear: 2005,
+        },
+        {
+            title: "The Silent Patient",
+            author: "Alex Michaelides",
+            genre: "Thriller",
+            price: 16.37,
+            language: "English",
+            format: "Hardcover",
+            publicationYear: 2019
+        },
+        {
+            title: "The Martian",
+            author: "Andy Weir",
+            genre: "Science Fiction",
+            price: 13.49,
+            language: "English",
+            format: "Paperback",
+            publicationYear: 2011
+        },
+        {
+            title: "The Hitchhiker's Guide to the Galaxy",
+            author: "Douglas Adams",
+            genre: "Science Fiction",
+            price: 11.25,
+            language: "English",
+            format: "Paperback",
+            publicationYear: 1979
+        },
+        {
+            title: "Jane Eyre",
+            author: "Charlotte Brontë",
+            genre: "Romance",
+            price: 10.75,
+            language: "English",
+            format: "E-book",
+            publicationYear: 1847
+        },
+        {
+            title: "The Book Thief",
+            author: "Markus Zusak",
+            genre: "Historical Fiction",
+            price: 12.60,
+            language: "English",
+            format: "Hardcover",
+            publicationYear: 2005
+        },
+        {
+            title: "The Da Vinci Code",
+            author: "Dan Brown",
+            genre: "Thriller",
+            price: 15.80,
+            language: "English",
+            format: "Paperback",
+            publicationYear: 2003
+        },
+        {
+            title: "Cien años de soledad",
+            author: "Gabriel García Márquez",
+            genre: "Fiction",
+            price: 17.99,
+            language: "Spanish",
+            format: "Paperback",
+            publicationYear: 1967
+        },
+        {
+            title: "La sombra del viento",
+            author: "Carlos Ruiz Zafón",
+            genre: "Mystery",
+            price: 16.25,
+            language: "Spanish",
+            format: "Hardcover",
+            publicationYear: 2001
+        },
+        {
+            title: "Madame Bovary",
+            author: "Gustave Flaubert",
+            genre: "Fiction",
+            price: 14.50,
+            language: "French",
+            format: "E-book",
+            publicationYear: 1856
+        },
+        {
+            title: "Le Petit Prince",
+            author: "Antoine de Saint-Exupéry",
+            genre: "Fiction",
+            price: 9.50,
+            language: "French",
+            format: "Paperback",
+            publicationYear: 1943
+        },
+        {
+            title: "Die Verwandlung",
+            author: "Franz Kafka",
+            genre: "Fiction",
+            price: 11.00,
+            language: "German",
+            format: "Paperback",
+            publicationYear: 1915
+        },
+        {
+            title: "Der Steppenwolf",
+            author: "Hermann Hesse",
+            genre: "Fiction",
+            price: 13.75,
+            language: "German",
+            format: "Hardcover",
+            publicationYear: 1927
+        }
+    ];
+
+    document.getElementById("preferencesForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const genre = document.getElementById("genre").value;
+        const author = document.getElementById("author").value.toLowerCase();
+        const priceRange = document.getElementById("priceRange").value;
+        const language = document.getElementById("language").value;
+        const format = document.getElementById("format").value;
+        const publicationYear = parseInt(document.getElementById("publicationYear").value);
+
+        const filteredBooks = books.filter((book) => {
+            let priceMatch = true;
+            if (priceRange) {
+                const [minPrice, maxPrice] = priceRange.split("-").map(Number);
+                if (priceRange === "30+") {
+                    priceMatch = book.price >= 30;
+                } else {
+                    priceMatch = book.price >= minPrice && book.price <= maxPrice;
+                }
+            }
+
+            let yearMatch = true;
+            if (publicationYear) {
+                yearMatch = book.publicationYear === publicationYear;
+            }
+
+            return (
+                (!genre || book.genre === genre) &&
+                (!author || book.author.toLowerCase().includes(author)) &&
+                priceMatch &&
+                (!language || book.language === language) &&
+                (!format || book.format === format) &&
+                yearMatch
+            );
+        });
+
+        const bookList = document.getElementById("bookList");
+        bookList.innerHTML = "";
+
+        if (filteredBooks.length === 0) {
+            bookList.innerHTML = "<li class='text-gray-500'>No books found matching your criteria. Please try again.</li>";
+        } else {
+            filteredBooks.forEach((book) => {
+                const listItem = document.createElement("li");
+                listItem.classList.add("bg-white", "rounded-md", "shadow-sm", "py-2", "px-4", "border-l-4", "border-blue-500", "hover:shadow-md", "transition-shadow", "duration-300");
+                listItem.innerHTML = `<h3 class="text-lg font-semibold text-gray-800">${book.title}</h3>
+                                          <p class="text-gray-600">By ${book.author}</p>
+                                          <p class="text-gray-500">Genre: ${book.genre}</p>
+                                          <p class="text-gray-500">Price: $${book.price.toFixed(2)}</p>
+                                          <p class="text-gray-500">Language: ${book.language}</p>
+                                          <p class="text-gray-500">Format: ${book.format}</p>
+                                          <p class="text-gray-500">Publication Year: ${book.publicationYear}</p>`;
+                bookList.appendChild(listItem);
+            });
+        }
+    });
+</script>
+</body>
+</html>
